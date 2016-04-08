@@ -46,7 +46,7 @@
   DL = new Downloader(USERNAME, PASSWORD, PLAYLIST, DIRECTORY);
 
   if (GENERATE) {
-    DL.generate = 1;
+    DL.generatePlaylist = 1;
   }
 
   DL.run();

@@ -1,5 +1,3 @@
-
-
 require('coffee-script')
 
 Colors 		= require('colors')
@@ -20,8 +18,6 @@ Program
 	.option('-g, --generate', "generate file for playlist", null)
 	.parse( process.argv )
 
-
-
 USERNAME = Program.username
 PASSWORD = Program.password
 PLAYLIST = Program.playlist
@@ -38,5 +34,5 @@ if !PLAYLIST?
 	return Program.outputHelp()
 
 DL = new Downloader( USERNAME, PASSWORD, PLAYLIST, DIRECTORY )
-if GENERATE then DL.generate = 1
+if GENERATE then DL.generatePlaylist = 1
 DL.run()

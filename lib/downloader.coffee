@@ -28,7 +28,8 @@ Log = (msg)=>
 
 class Track extends EventEmitter
 
-  constructor: (@trackId, @Spotify, @directory, @cb, @track = {})->
+  constructor: (@trackId, @Spotify, @directory, @Playlist, @cb, @track = {})->
+    @file = {}
     @getTrack()
 
   getTrack: =>
@@ -42,6 +43,12 @@ class Track extends EventEmitter
     artistpath = dir + '/' + @track.artist[0].name.replace(/\//g, ' - ') + '/'
     albumpath = artistpath + @track.album.name.replace(/\//g, ' - ') + ' [' + @track.album.date.year + ']/'
     filepath = albumpath + @track.artist[0].name.replace(/\//g, ' - ') + ' - ' + @track.name.replace(/\//g, ' - ') + '.mp3';
+
+    @file.name = @track.name.replace(/\//g, ' - ')
+    @file.path = filepath
+
+    console.log @file
+    @Playlist.addTrackToPlaylist(@file)
 
     if fs.existsSync(filepath)
       stats = fs.statSync(filepath)
@@ -75,6 +82,8 @@ class Track extends EventEmitter
       track: @track.number
     ffmetadata.write filepath, id3, @cb
 
+  getFileProperties: ()=>
+    return @file
 
 class Downloader extends EventEmitter
 
@@ -84,9 +93,12 @@ class Downloader extends EventEmitter
     @dir = @directory
     @makeFolder = false
     @generatePlaylist = false
+    @Playlist = new Playlist()
 
   run: ()=>
     console.log 'Downloader App Started..'.green
+
+    if @generatePlaylist then @Playlist.enabled = true
 
     async.series [@attemptLogin, @getPlaylist, @processTracks], (err, res)=>
       if err then return Error "#{err.toString()}"
@@ -103,7 +115,12 @@ class Downloader extends EventEmitter
     @Spotify.playlist @playlist, (err, playlistData)=>
       if err then return Error("Playlist data error... #{err}")
       Log "Got Playlist: #{playlistData.attributes.name}"
+
       if @folder then @dir = @directory + playlistData.attributes.name.replace(/\//g, ' - ') + '/'
+
+      @Playlist.directory = @directory
+      @Playlist.name = playlistData.attributes.name
+
       @Tracks = lodash.map playlistData.contents.items, (item)=>
         return item.uri
       cb?()
@@ -113,28 +130,29 @@ class Downloader extends EventEmitter
     async.mapSeries @Tracks, @processTrack, cb
 
   processTrack: (track, cb)=>
-    TempInstance = new Track(track, @Spotify, @dir, cb)
+    TempInstance = new Track(track, @Spotify, @dir, @Playlist, cb)
 
 class Playlist extends EventEmitter
 
   constructor: ()->
+    @enabled = false
     @directory = null
     @name = null
     @playlistFile = null
+    @traks = []
 
-  addTrackToPlaylist: ()=>
+  addTrackToPlaylist: (file, cb)=>
+    if !@enabled then return
+    track = file.path
 
+    playlistFile = @name.replace(/\//g, ' - ') + '.m3u'
+    if track.indexOf(@directory) != -1 then relativePath = track.slice(track.indexOf(@directory), track.length)
 
-#  generatePlaylistFile: (filename, cb)=>
-#    dir = Path.resolve("#{@directory}")
-#    playlistFile = dir + '/' + @track.artist[0].name.replace(/\//g, ' - ') + '.m3u'
-#
-#    fs.appendFile('.m3u', 'data to append', (err)=>
-#      if err then throw err
-#      console.log('The "data to append" was appended to file!')
-#    )
-#    cb?()
-
+    fs.appendFile(playlistFile, relativePath + "\n", (err)=>
+      if err then throw err
+      console.log('The "data to append" was appended to file!')
+    )
+    cb?()
 
 
 module.exports = Downloader

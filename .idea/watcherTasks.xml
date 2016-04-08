@@ -20,6 +20,7 @@
         </array>
       </option>
       <option name="outputFromStdout" value="false" />
+      <option name="passParentEnvs" value="true" />
       <option name="program" value="/usr/bin/coffee" />
       <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="true" />
