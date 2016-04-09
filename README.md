@@ -41,7 +41,7 @@ Install nodejs if you haven't already. ( [NodeJS Downloads](http://nodejs.org/do
 ###Must haves:
 
 - -Spotify Premium Account ( haven't tried it on a free account )-
-- Only tested on Ubuntu 14.04 ( Should work on Mac OSX and Windows as well??? )
+- Only tested on Ubuntu 14.04 and Windows XP ( Should work on Mac OSX)
 
 ### Disclaimer:
 
