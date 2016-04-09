@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 require('coffee-script')
 
-Colors 		= require('colors')
+require('colors')
 Program 	= require('commander')
 Downloader	= require('./lib/downloader')
 
@@ -9,7 +11,7 @@ getUserHome = =>
 	return process.env['HOME']
 
 Program
-	.version('0.0.1')
+	.version('0.0.2')
 	.option('-u, --username [username]', 'Spotify Username (required)', null)
 	.option('-p, --password [password]', 'Spotify Password (required)', null)
 	.option('-l, --playlist [playlist]', 'Spotify URI for playlist', null)
@@ -33,6 +35,12 @@ if !PLAYLIST?
 	console.log '!!! MUST SPECIFY A SPOTIFY PLAYLIST !!!'.red
 	return Program.outputHelp()
 
-DL = new Downloader( USERNAME, PASSWORD, PLAYLIST, DIRECTORY )
-if GENERATE then DL.generatePlaylist = 1
-DL.run()
+console.log('init')
+Downloader = new Downloader( USERNAME, PASSWORD, PLAYLIST, DIRECTORY )
+Downloader.setPlaylist(PLAYLIST)
+Downloader.setBasePath(DIRECTORY)
+Downloader.setMakeFolder(FOLDER ? true : false)
+Downloader.setGeneratePlaylist(GENERATE ? true : false)
+
+console.log('run')
+Downloader.run()

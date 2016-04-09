@@ -9,11 +9,6 @@ Install nodejs if you haven't already. ( [NodeJS Downloads](http://nodejs.org/do
 
 	npm install -g spotify-playlist-downloader
 
-You will also need ffmpeg installed.
-
-	In mac terminal: brew install ffmpeg
-
-
 ###Available Options
 
 	
@@ -27,6 +22,7 @@ You will also need ffmpeg installed.
 	    -p, --password [password]    Spotify Password (required)
 	    -l, --playlist [playlist]    Spotify URI for playlist
 	    -d, --directory [directory]  Directory you want to save the mp3s to, default: HOME/spotify-mp3s
+	    -g, --generate               Generate m3u playlist file
 	
 
 
@@ -44,8 +40,8 @@ You will also need ffmpeg installed.
 
 ###Must haves:
 
-- Spotify Premium Account ( haven't tried it on a free account )
-- Only tested on Mac OSX 10.10 ( Should work on Linux and Windows as well??? )
+- -Spotify Premium Account ( haven't tried it on a free account )-
+- Only tested on Ubuntu 14.04 ( Should work on Mac OSX and Windows as well??? )
 
 ### Disclaimer:
 
