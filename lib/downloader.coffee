@@ -23,7 +23,13 @@ Success = (success)=>
   process.exit(0)
 
 Log = (msg)=>
+  if typeof msg == 'undefined'
+    return
   console.log " - #{msg}".green
+
+ListProperties = (object)=>
+  properties = Object.keys(object);
+  Log properties
 
 class Downloader extends EventEmitter
   constructor: (@username, @password)->
@@ -47,7 +53,7 @@ class Downloader extends EventEmitter
 
   run: () =>
     Log 'Downloader App Started..'.green
-    async.series [@login, @loadPlaylist, @processTrackUrls], (err, res)=>
+    async.series [@login, @loadSpotifyItem, @processTrackUrls], (err, res)=>
       if err
         Log "#{res.toString()}"
         return Error "#{err.toString()}"
@@ -66,6 +72,12 @@ class Downloader extends EventEmitter
 
       callback?()
 
+  loadSpotifyItem: (callback)=>
+    if @playlist.indexOf('album') != -1
+      @loadAlbum(callback)
+    else
+      @loadPlaylist(callback)
+
   loadPlaylist: (callback)=>
     Log 'Getting Playlist Data'
 
@@ -74,7 +86,7 @@ class Downloader extends EventEmitter
         return Error("Playlist data error... #{err}")
 
       Log "Got Playlist: #{playlistData.attributes.name}"
-      Log "#{playlistData}"
+#      Log "#{playlistData}"
 
       @Playlist.setName(playlistData.attributes.name)
 
@@ -87,6 +99,38 @@ class Downloader extends EventEmitter
 
       @trackUrls = lodash.map playlistData.contents.items, (item)=>
         return item.uri
+
+      callback?()
+
+  loadAlbum: (callback)=>
+    Log 'Getting Album Data'
+
+    @Spotify.get @playlist, (err, album)=>
+      if err
+        return Error("Album data error... #{err}")
+
+#      ListProperties album
+#      ListProperties album.disc
+
+      Log "Got Album: #{album.name}"
+      Log "#{album}"
+
+      tracks = []
+      album.disc.forEach (disc)=>
+        if (Array.isArray(disc.track))
+          tracks.push.apply(tracks, disc.track);
+
+      @trackUrls = lodash.map tracks, (track)=>
+        return track.uri
+
+      @Playlist.setName(album.name)
+
+      if @makeFolder
+        @playlistPath = @basePath + '/' + album.name.replace(/\//g, ' - ') + '/'
+        @Track.setDirectory(@playlistPath)
+
+      @Playlist.directory = @basePath
+      @Playlist.name = album.name
 
       callback?()
 
