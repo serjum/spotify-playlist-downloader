@@ -1,6 +1,6 @@
 {
   "name": "spotify-downloader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Download spotify playlists (from spotify)",
   "main": "main.js",
   "dependencies": {

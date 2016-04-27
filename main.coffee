@@ -11,10 +11,10 @@ getUserHome = =>
 	return process.env['HOME']
 
 Program
-	.version('0.0.2')
+	.version('0.0.3')
 	.option('-u, --username [username]', 'Spotify Username (required)', null)
 	.option('-p, --password [password]', 'Spotify Password (required)', null)
-	.option('-l, --playlist [playlist]', 'Spotify URI for playlist', null)
+	.option('-l, --link 		[link/uri]', 'Spotify URI for playlist/album', null)
 	.option('-d, --directory [directory]', "Directory you want to save the mp3s to, default: #{getUserHome()}/spotify-mp3s", "#{getUserHome()}/spotify-mp3s")
 	.option('-f, --folder', "create folder for playlist", null)
 	.option('-g, --generate', "generate file for playlist", null)
@@ -22,7 +22,7 @@ Program
 
 USERNAME = Program.username
 PASSWORD = Program.password
-PLAYLIST = Program.playlist
+PLAYLIST = Program.link
 DIRECTORY = Program.directory
 FOLDER = Program.folder
 GENERATE = Program.generate

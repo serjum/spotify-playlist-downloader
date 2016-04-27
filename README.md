@@ -11,7 +11,6 @@ Install nodejs if you haven't already. ( [NodeJS Downloads](http://nodejs.org/do
 
 ###Available Options
 
-	
 	Usage: spotify-playlist-downloader [options]
 	
 	Options:
@@ -20,15 +19,18 @@ Install nodejs if you haven't already. ( [NodeJS Downloads](http://nodejs.org/do
 	    -V, --version                output the version number
 	    -u, --username [username]    Spotify Username (required)
 	    -p, --password [password]    Spotify Password (required)
-	    -l, --playlist [playlist]    Spotify URI for playlist
+	    -l, --link 	   [link/uri]    Spotify URI for playlist/album
 	    -d, --directory [directory]  Directory you want to save the mp3s to, default: HOME/spotify-mp3s
 	    -g, --generate               Generate m3u playlist file
 	
 
 
-####So if you wanted to download "Top 100 Hip-Hop Tracks on Spotify". You would use the following command:
+####So if you wanted to download playlist "Top 100 Hip-Hop Tracks on Spotify". You would use the following command:
 
 	spd -u yourusername -p yourpassword -l spotify:user:spotify:playlist:06KmJWiQhL0XiV6QQAHsmw
+
+####So if you wanted to download album "Epiphany". You would use the following command:
+	spd -u yourusername -p yourpassword -l spotify:album:44Z1ZEmOyois0QoAgfUxrD
 
 `spd` is the shorthand for `spotify-playlist-downloader`. You can use either one.
 
@@ -40,8 +42,8 @@ Install nodejs if you haven't already. ( [NodeJS Downloads](http://nodejs.org/do
 
 ###Must haves:
 
-- -Spotify Premium Account ( haven't tried it on a free account )-
-- Only tested on Ubuntu 14.04 and Windows XP ( Should work on Mac OSX)
+- ~~Spotify Premium Account ( haven't tried it on a free account )~~
+- Tested on Ubuntu 14.04 and Windows XP ( Should work on Mac OSX)
 
 ### Disclaimer:
 
