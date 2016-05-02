@@ -31,6 +31,10 @@ ListProperties = (object)=>
   properties = Object.keys(object);
   Log properties
 
+replaceAll = (search, replacement, target) =>
+  return target.replace(new RegExp(search, 'g'), replacement);
+
+
 class Downloader extends EventEmitter
   constructor: (@username, @password)->
     @Spotify = null
@@ -73,10 +77,28 @@ class Downloader extends EventEmitter
       callback?()
 
   loadSpotifyItem: (callback)=>
+    if @playlist.indexOf('https://play.spotify.com') != -1
+      @playlist = @playlist.replace('https://play.spotify.com', 'spotify')
+      @playlist = replaceAll('/', ':', @playlist)
+
+    Log @playlist
+
     if @playlist.indexOf('album') != -1
       @loadAlbum(callback)
+    else if @playlist.indexOf('track') != -1
+      @loadTrack(callback)
     else
       @loadPlaylist(callback)
+
+  loadTrack: (callback)=>
+    Log 'Getting Track Data'
+
+    #    do not create playlist for 1 track
+    @Playlist.setEnabled(false)
+
+    @trackUrls = [@playlist]
+
+    callback?()
 
   loadPlaylist: (callback)=>
     Log 'Getting Playlist Data'
@@ -86,7 +108,6 @@ class Downloader extends EventEmitter
         return Error("Playlist data error... #{err}")
 
       Log "Got Playlist: #{playlistData.attributes.name}"
-#      Log "#{playlistData}"
 
       @Playlist.setName(playlistData.attributes.name)
 
@@ -108,9 +129,6 @@ class Downloader extends EventEmitter
     @Spotify.get @playlist, (err, album)=>
       if err
         return Error("Album data error... #{err}")
-
-#      ListProperties album
-#      ListProperties album.disc
 
       Log "Got Album: #{album.name}"
       Log "#{album}"
