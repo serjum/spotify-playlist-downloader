@@ -1,3 +1,7 @@
+# This tool does not working anymore
+
+
+
 # Spotify Playlist Downloader
 
 Download an entire spotify playlists, albums or tracks ( FROM SPOTIFY @ 160kbps ) to your local machine.
